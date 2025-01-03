@@ -2,7 +2,8 @@ import pickle
 import pandas as pd
 import numpy as np
 from flask import Flask, request
-import joblib  # Replace pickle with joblib
+import joblib
+from flask_cors import CORS  # Import the CORS module
 
 model = None
 
@@ -12,6 +13,7 @@ def load_model():
     model = joblib.load('best_rf_model.pkl')
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/')
 def home_endpoint():
