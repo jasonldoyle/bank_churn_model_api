@@ -1,14 +1,15 @@
 import pickle
+import pandas as pd
 import numpy as np
 from flask import Flask, request
+import joblib  # Replace pickle with joblib
 
 model = None
 
 def load_model():
     global model
-
-with open('best_rf_model.pkl', 'rb') as f:
-        model = pickle.load(f)
+    # Use joblib to load the model
+    model = joblib.load('best_rf_model.pkl')
 
 app = Flask(__name__)
 
@@ -18,14 +19,18 @@ def home_endpoint():
 
 @app.route('/predict', methods=['POST'])
 def get_prediction():
-
     if request.method == 'POST':
-        data = request.get_json()  # Get data posted as a json
-        data = np.array(data)[np.newaxis, :]  # converts shape from (4,) to (1, 4)
-        prediction = model.predict(data)  # runs globally loaded model on the data
-    return str(prediction[0])
+        try:
+            # Get JSON data and convert it to a Pandas DataFrame
+            data = request.get_json()
+            df = pd.DataFrame(data)
+            
+            # Make predictions
+            predictions = model.predict(df)
+            return {"predictions": predictions.tolist()}
+        except Exception as e:
+            return {"error": str(e)}, 400
 
 if __name__ == '__main__':
-    load_model()  # load model at the beginning once only
-    app.run(host='0.0.0.0', port=80)
-
+    load_model()
+    app.run(host='0.0.0.0', port=8080, debug=True)
