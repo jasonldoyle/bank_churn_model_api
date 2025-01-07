@@ -1,7 +1,7 @@
 import pickle
 import pandas as pd
 import numpy as np
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import joblib
 from flask_cors import CORS  # Import the CORS module
 
@@ -23,10 +23,14 @@ def home_endpoint():
 def test():
     if request.method == 'POST':
         try: 
-            return {'data':request.get_json()}
+            response=jsonify('HelloWorld')
+            response.headers.add("Content-Type",
+                                 "application/json")
+            return response
         except Exception as e:
             return {"error": str(e)}, 400
         
+
 @app.route('/predict', methods=['POST', 'OPTIONS', 'GET'])  # Without trailing slash
 def get_prediction():
     if request.method == 'GET':
