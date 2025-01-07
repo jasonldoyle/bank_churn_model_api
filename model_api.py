@@ -19,6 +19,14 @@ CORS(app, resources={r"/predict": {"origins": "*"}})  # Allow all origins for '/
 def home_endpoint():
     return 'Hello World!'
 
+@app.route('/test', methods = ['POST'])
+def test():
+    if request.method == 'POST':
+        try: 
+            return {'data':request.get_json()}
+        except Exception as e:
+            return {"error": str(e)}, 400
+        
 @app.route('/predict', methods=['POST', 'OPTIONS', 'GET'])  # Without trailing slash
 def get_prediction():
     if request.method == 'GET':
