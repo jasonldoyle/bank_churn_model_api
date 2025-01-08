@@ -31,9 +31,9 @@ def test():
     return jsonify({'message': f'Hello, {name}!'})
         
 
-@app.route('/predict', methods=['POST', 'OPTIONS', 'GET'])  # Without trailing slash
+@app.route('/predict', methods=['POST'])  # Without trailing slash
 def get_prediction():
-    if request.method == 'GET':
+    if request.method == 'POST':
         try:
             data = request.get_json()  # Get data posted as JSON
             df = pd.DataFrame(data)  # Convert to DataFrame
