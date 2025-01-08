@@ -13,7 +13,7 @@ def load_model():
     model = joblib.load('best_rf_model.pkl')
 
 app = Flask(__name__)
-CORS(app, resources={r"/predict": {"origins": "*"}})  # Allow all origins for '/predict' route
+cors = CORS(app)
 
 @app.route('/')
 def home_endpoint():
