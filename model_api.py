@@ -38,7 +38,7 @@ def get_prediction():
             data = request.get_json()  # Get data posted as JSON
             df = pd.DataFrame(data)  # Convert to DataFrame
             predictions = model.predict(df)  # Make predictions
-            return {"predictions": predictions.tolist()}
+            return jsonify({"predictions": predictions.tolist()})
         except Exception as e:
             return {"error": str(e)}, 400
     elif request.method == 'OPTIONS':
